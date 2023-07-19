@@ -26,4 +26,23 @@
 .admin_box .admin {
   color: #fff;
   margin-left: 24px;
+  text-align: center;
+}
+.admin_box .admin .admin_status {
+  display: flex;
+  align-items: center;
+}
+.admin_box .admin .admin_status .cirlce {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #18bc9c;
+  margin-right: 5px;
+}
+.admin_box .admin .admin_name {
+  font-weight: bold;
+  font-size: 16px;
+}
+.breadcrumb_box {
+  margin-left: 20px;
 }

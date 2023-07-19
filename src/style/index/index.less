@@ -21,6 +21,7 @@
   background: #141414;
 }
 
+//管理员盒子
 .admin_box {
   padding-left: 24px;
   height: 88px;
@@ -30,5 +31,29 @@
   .admin {
     color: #fff;
     margin-left: 24px;
+    text-align: center;
+
+    .admin_status {
+      display: flex;
+      align-items: center;
+
+      .cirlce {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #18bc9c;
+        margin-right: 5px;
+      }
+    }
+
+    .admin_name {
+      font-weight: bold;
+      font-size: 16px;
+    }
   }
+}
+
+//面包屑盒子
+.breadcrumb_box {
+  margin-left: 20px;
 }
