@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
+import { DeleteOutlined } from "@ant-design/icons-vue"
 import { Ref, ref } from 'vue'
+import { notification } from 'ant-design-vue';
 type Key = string | number
 interface DataType {
   id: number;
@@ -45,6 +47,19 @@ const data: Ref<DataType[]> = ref([{
   createTime: '2023-07-21',
   operation: '',
 }])
+
+//删除当列
+let isShowDel: Ref<boolean> = ref(false)
+let currentIndex: number = 0
+function DeleteColumn(index: number) {
+  isShowDel.value = true
+  currentIndex = index
+}
+function confirmDel() {
+  data.value.splice(currentIndex, 1)
+  isShowDel.value = false
+  notification.success({ message: '删除成功', duration: 2 })
+}
 //多列选项
 const rowSelection: TableProps['rowSelection'] = {
   onChange: (selectedRowKeys: Key[], selectedRows: DataType[]) => {
@@ -58,7 +73,24 @@ const rowSelection: TableProps['rowSelection'] = {
 </script>
 <template>
   <div class="page">
-    <a-table :row-selection="rowSelection" :columns="columns" :data-source="data"></a-table>
+    <div>
+      <a-button type="primary" danger>删除</a-button>
+    </div>
+    <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" style="margin-top: 10px;">
+      <template #bodyCell="{ column, index }">
+        <template v-if="column.dataIndex === 'operation'">
+          <a-button type="primary" danger style="margin-left: 20px;" @click="DeleteColumn(index)">
+            <template #icon>
+              <DeleteOutlined />
+            </template>
+          </a-button>
+        </template>
+      </template>
+    </a-table>
+    <!--弹出-->
+    <a-modal v-model:open="isShowDel" title="提醒" cancelText="取消" okText="确定" @ok="confirmDel">
+      您确定要删除吗
+    </a-modal>
   </div>
 </template>
 <style scoped>

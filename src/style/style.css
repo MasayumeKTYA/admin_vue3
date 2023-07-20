@@ -1,0 +1,28 @@
+.admin_status {
+  display: flex;
+  align-items: center;
+}
+
+.admin_status .status_cirlce {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #18bc9c;
+  margin-right: 5px;
+}
+
+.admin_status .status_font {
+  color: #18bc9c;
+}
+
+.admin_status .status_cirlce_none {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d10a0a;
+  margin-right: 5px;
+}
+
+.admin_status .status_font_none {
+  color: #d10a0a;
+}

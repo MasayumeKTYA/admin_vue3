@@ -21,6 +21,45 @@
   background: #141414;
 }
 
+//header部分
+.layout_header {
+  background: #fff;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  //面包屑盒子
+  .breadcrumb_box {
+    margin-left: 20px;
+    width: 1100px;
+
+  }
+
+  .logout {
+
+    // width: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: absolute;
+    right: 120px;
+
+    .logout_icon {
+      font-size: 30px;
+
+
+    }
+
+    .logout_font {
+      font-size: 20px;
+      margin-left: 5px;
+
+    }
+  }
+
+}
+
 //管理员盒子
 .admin_box {
   padding-left: 24px;
@@ -33,27 +72,9 @@
     margin-left: 24px;
     text-align: center;
 
-    .admin_status {
-      display: flex;
-      align-items: center;
-
-      .cirlce {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: #18bc9c;
-        margin-right: 5px;
-      }
-    }
-
     .admin_name {
       font-weight: bold;
       font-size: 16px;
     }
   }
-}
-
-//面包屑盒子
-.breadcrumb_box {
-  margin-left: 20px;
 }

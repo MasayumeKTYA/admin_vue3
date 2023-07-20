@@ -2,8 +2,8 @@ import { createApp } from "vue";
 import "./style/style.css";
 import {
   Form, Layout, Avatar, Breadcrumb,
-  Menu, Checkbox, Button,Pagination, Input,PageHeader ,
-  Table,Modal ,Select
+  Menu, Checkbox, Button, Pagination, Input, PageHeader,
+  Table, Modal, Select
 } from "ant-design-vue";
 import App from "./App.vue";
 //路由
@@ -13,8 +13,10 @@ import { createPinia } from "pinia";
 const app = createApp(App);
 
 router.beforeEach((to, from, next) => {
+  console.log(to);
+
   const token = localStorage.getItem('token');
-  const isAuthenticated:boolean = !!token;
+  const isAuthenticated: boolean = !!token;
   const requiresAuth = to.meta.requiresAuth; // 获取路由元字段
 
   if (requiresAuth && !isAuthenticated) {

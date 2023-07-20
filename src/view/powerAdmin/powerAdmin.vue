@@ -57,6 +57,15 @@ const data: Ref<DataType[]> = ref([
     status: 1,
     lastLogin: '2023-07-21',
   },
+  {
+    key: '3',
+    username: 'Jim Green',
+    name: "测试账号",
+    account: "测试用户",
+    email: '77077789@qq.com',
+    status: 2,
+    lastLogin: '2023-07-21',
+  },
 ]);
 //多列选项
 const rowSelection: TableProps['rowSelection'] = {
@@ -123,8 +132,14 @@ const cancleForm = () => {
     <a-table :row-selection="rowSelection" :columns="columns" :data-source="data">
       <template #bodyCell="{ record, column, index }">
         <template v-if="column.dataIndex === 'status'">
-          <div v-if="record.status == 1">在线</div>
-          <div v-else>离线</div>
+          <div class="admin_status" v-if="record.status == 1">
+            <div class="status_cirlce"></div>
+            <div class="status_font">在线</div>
+          </div>
+          <div class="admin_status" v-else>
+            <div class="status_cirlce_none"></div>
+            <div class="status_font_none">离线</div>
+          </div>
         </template>
         <template v-if="column.dataIndex === 'operation'">
           <a-button type="primary">
