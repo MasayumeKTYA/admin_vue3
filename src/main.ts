@@ -2,7 +2,8 @@ import { createApp } from "vue";
 import "./style/style.css";
 import {
   Form, Layout, Avatar, Breadcrumb,
-  Menu, Checkbox, Button, Input
+  Menu, Checkbox, Button,Pagination, Input,PageHeader ,
+  Table,Modal ,Select
 } from "ant-design-vue";
 import App from "./App.vue";
 //路由
@@ -13,7 +14,7 @@ const app = createApp(App);
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token');
-  const isAuthenticated = !!token;
+  const isAuthenticated:boolean = !!token;
   const requiresAuth = to.meta.requiresAuth; // 获取路由元字段
 
   if (requiresAuth && !isAuthenticated) {
@@ -32,5 +33,10 @@ app.use(Form)
   .use(Button)
   .use(Input)
   .use(router)
+  .use(Pagination)
+  .use(PageHeader)
+  .use(Table)
+  .use(Modal)
+  .use(Select)
   .use(createPinia())
   .mount("#app");

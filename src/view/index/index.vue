@@ -12,6 +12,8 @@ import {
   AlignLeftOutlined,
   AlignCenterOutlined
 } from '@ant-design/icons-vue';
+import router from '@/router';
+console.log(router.options.routes);
 const state = reactive({
   collapsed: false,
   selectedKeys: ['1'],
@@ -30,12 +32,14 @@ const items = reactive([
         icon: () => h(UserOutlined),
         label: '管理员管理',
         title: '管理员管理',
+        route: 'powerAdmin',
       },
       {
         key: '2',
         icon: () => h(ProfileOutlined),
         label: '管理员日志',
         title: '管理员日志',
+        route: 'powerLog',
       }
     ],
   },
@@ -87,6 +91,12 @@ const menuShow = () => {
 const menuHiden = () => {
   collapsed.value = false
 }
+const toRouter = (e: any) => {
+  console.log(e);
+  const route: string = e.item.route
+  router.push({ name: route })
+
+}
 </script>
 <template>
   <a-layout style="height: 100vh;">
@@ -102,18 +112,19 @@ const menuHiden = () => {
         </div>
       </div>
       <a-menu v-model:openKeys="state.openKeys" v-model:selectedKeys="state.selectedKeys" mode="inline" theme="dark"
-        :inline-collapsed="state.collapsed" :items="items"></a-menu>
+        :inline-collapsed="state.collapsed" :items="items" @click="toRouter"></a-menu>
     </a-layout-sider>
     <a-layout>
       <a-layout-header style="background: #fff; padding: 0;display: flex;align-items: center;">
         <menu-unfold-outlined v-if="collapsed" class="trigger" @click="menuHiden" />
         <menu-fold-outlined v-else class="trigger" @click="menuShow" />
         <a-breadcrumb class="breadcrumb_box">
-          <a-breadcrumb-item>Home</a-breadcrumb-item>
+          <a-breadcrumb-item>首页</a-breadcrumb-item>
+          <a-breadcrumb-item>首页</a-breadcrumb-item>
         </a-breadcrumb>
       </a-layout-header>
       <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
-        Content
+        <RouterView></RouterView>
       </a-layout-content>
     </a-layout>
   </a-layout>

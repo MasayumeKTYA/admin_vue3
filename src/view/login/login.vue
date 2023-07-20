@@ -1,12 +1,13 @@
 <script lang="ts" setup>
-import { reactive } from 'vue';
 
+import { reactive } from 'vue';
+import { Router, useRouter } from 'vue-router';
 interface FormState {
   username: string;
   password: string;
   remember: boolean;
 }
-
+const router: Router = useRouter()
 const formState = reactive<FormState>({
   username: '',
   password: '',
@@ -14,6 +15,9 @@ const formState = reactive<FormState>({
 });
 const onFinish = (values: FormState) => {
   console.log('Success:', values);
+  console.log(router);
+  localStorage.setItem('token', "zt")
+  router.push({ path: '/' })
 };
 
 const onFinishFailed = (errorInfo: any) => {
