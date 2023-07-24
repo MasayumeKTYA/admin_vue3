@@ -15,7 +15,7 @@ const formState = reactive<FormState>({
 });
 const onFinish = (values: FormState) => {
   console.log('Success:', values);
-  console.log(router);
+  // console.log(router);
   localStorage.setItem('token', "zt")
   router.push({ path: '/' })
 };

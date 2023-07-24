@@ -14,7 +14,9 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons-vue';
 import router from '@/router';
-console.log(router.options.routes);
+import { useRoute, } from 'vue-router';
+const route = useRoute()
+
 const state = reactive({
   collapsed: false,
   selectedKeys: ['1'],
@@ -55,6 +57,7 @@ const items = reactive([
         icon: (): VNode => h(LineChartOutlined),
         label: '销售数据',
         title: '销售数据',
+        route: 'saleData',
       },
     ],
   },
@@ -98,24 +101,47 @@ const menuHiden = () => {
 interface Route {
   path: string;
   breadcrumbName: string;
-  children?: Array<{
-    path: string;
-    breadcrumbName: string;
-  }>;
+  // icon: VNode
+  isExit: boolean
 }
 //面包屑
-const routes = ref<Route[]>([]);
+const routes = ref<Route[]>([
+  {
+    path: 'powerAdmin',
+    breadcrumbName: '管理员管理',
+    isExit: false
+  }
+]);
 //前往各自的路由
 const toRouter = (e: any) => {
   console.log(e);
   const route: string = e.item.route
   const breadObject: Route = {
     path: e.item.route,
-    breadcrumbName: e.item.title
+    breadcrumbName: e.item.title,
+    //icon: e.item.icon
+    isExit: true
   }
-  routes.value.push(breadObject)
+  let flag: boolean = !routes.value.some(item => item.path == e.item.route)
+  console.log(flag);
+  if (flag) {
+    routes.value.push(breadObject)
+  }
+
+  //路由切换
   router.push({ name: route })
-  console.log(routes);
+}
+//头部路由删除
+function close(index: number) {
+  //获取删除的路由页面值
+  let routeName: string = routes.value[index].path
+  //删除
+  routes.value.splice(index, 1)
+  //判断当前页面路由
+  if (route.name == routeName) {
+    //切换
+    router.push({ name: routes.value[routes.value.length - 1].path })
+  }
 
 }
 //登出
@@ -146,18 +172,11 @@ function logout() {
       <a-layout-header class="layout_header">
         <menu-unfold-outlined v-if="collapsed" @click="menuHiden" />
         <menu-fold-outlined v-else @click="menuShow" />
-        <a-breadcrumb class="breadcrumb_box" :routes="routes">
-          <template #itemRender="{ route, routes }">
-            <span v-if="routes.indexOf(route) === routes.length - 1">{{ route.breadcrumbName }}</span>
-            <router-link v-else :to="{ name: route.path }">{{ route.breadcrumbName }}</router-link>
-          </template>
-
-        </a-breadcrumb>
+        <HeaderRouyer :routes="routes" @close="close" />
         <div class="logout" @click="logout">
           <LogoutOutlined class="logout_icon" />
           <div class="logout_font">登出</div>
         </div>
-
       </a-layout-header>
       <a-layout-content :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }">
         <RouterView></RouterView>

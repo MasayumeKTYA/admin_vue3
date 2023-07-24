@@ -36,6 +36,7 @@ const columns: TableColumnType<DataType>[] = [
   }, {
     title: '操作',
     dataIndex: 'operation',
+    align: "center"
   },
 ];
 const data: Ref<DataType[]> = ref([
@@ -73,7 +74,7 @@ const rowSelection: TableProps['rowSelection'] = {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
   getCheckboxProps: (record: DataType) => ({
-    disabled: record.account === '管理员', // Column configuration not to be checked
+    disabled: record.account === '管理员',
     name: record.name,
   }),
 };

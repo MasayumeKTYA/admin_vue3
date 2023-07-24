@@ -1,10 +1,14 @@
 import { createApp } from "vue";
 import "./style/style.css";
+//antd 组件
 import {
-  Form, Layout, Avatar, Breadcrumb,
-  Menu, Checkbox, Button, Pagination, Input, PageHeader,
+  Form, Layout, Avatar,
+  Menu, Checkbox, Button, Pagination,
+  Input, PageHeader,
   Table, Modal, Select
 } from "ant-design-vue";
+//自定义组件
+import HeaderRouyer from '@/components/HeaderRouyer.vue'
 import App from "./App.vue";
 //路由
 import router from "./router";
@@ -25,11 +29,10 @@ router.beforeEach((to, from, next) => {
     next(); // 其他情况允许导航
   }
 });
-
+app.component('HeaderRouyer', HeaderRouyer)
 app.use(Form)
   .use(Layout)
   .use(Avatar)
-  .use(Breadcrumb)
   .use(Menu)
   .use(Checkbox)
   .use(Button)

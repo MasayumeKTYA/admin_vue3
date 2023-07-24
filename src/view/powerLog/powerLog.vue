@@ -17,6 +17,7 @@ const columns: TableColumnType<DataType>[] = [
   {
     title: 'ID',
     dataIndex: 'id',
+    sorter: true,
   }, {
     title: '用户名',
     dataIndex: 'username',
@@ -35,6 +36,7 @@ const columns: TableColumnType<DataType>[] = [
   }, {
     title: '操作',
     dataIndex: 'operation',
+    align: "center"
   },
 
 ]
