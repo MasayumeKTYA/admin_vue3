@@ -14,7 +14,7 @@ import App from "./App.vue";
 import router from "./router";
 //状态管理
 import { createPinia } from "pinia";
-import '@/mock/admin.ts'
+import '@/mock/mock'
 const app = createApp(App);
 
 router.beforeEach((to, _from, next) => {

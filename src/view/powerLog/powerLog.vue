@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
 import { DeleteOutlined } from "@ant-design/icons-vue"
-import { Ref, ref } from 'vue'
+import { Ref, ref, onMounted, onUnmounted } from 'vue'
 import { notification } from 'ant-design-vue';
+import { adminLogHttp } from '@/api/http'
+import { typeAdminLog } from '@/type/admin'
+
 type Key = string | number
-interface DataType {
-  id: number;
-  username: string;
-  title: string;
-  ip: string;
-  browser: string;
-  createTime: string
-  operation: string
-}
-const columns: TableColumnType<DataType>[] = [
+
+const columns: TableColumnType<typeAdminLog>[] = [
   {
     title: 'ID',
     dataIndex: 'id',
@@ -40,7 +35,7 @@ const columns: TableColumnType<DataType>[] = [
   },
 
 ]
-const data: Ref<DataType[]> = ref([{
+const data: Ref<typeAdminLog[]> = ref([{
   id: 1,
   username: 'admin',
   title: '登录',
@@ -64,21 +59,52 @@ function confirmDel() {
 }
 //多列选项
 const rowSelection: TableProps['rowSelection'] = {
-  onChange: (selectedRowKeys: Key[], selectedRows: DataType[]) => {
+  onChange: (selectedRowKeys: Key[], selectedRows: typeAdminLog[]) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
-  // getCheckboxProps: (record: DataType) => ({
+  // getCheckboxProps: (record: typeAdminLog) => ({
   //   disabled: record.account === '管理员', // Column configuration not to be checked
   //   name: record.name,
   // }),
 };
+
+
+/**
+ * 请求
+ */
+async function postAdminLog(page: any) {
+  const res = await adminLogHttp(page)
+  console.log(res);
+  data.value = res.data.data
+}
+postAdminLog({ page: 1 })
+// 定义响应式的高度
+const tableHeight = ref(0);
+// 监听窗口大小变化
+onMounted(() => {
+  const handleResize = () => {
+    const windowHeight = window.innerHeight;
+    const otherElementsHeight = 100; // 假设其他元素的高度为100px
+    tableHeight.value = windowHeight - otherElementsHeight - 200;
+    console.log(tableHeight.value);
+
+  };
+
+  handleResize();
+  window.addEventListener('resize', handleResize);
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+  });
+});
 </script>
 <template>
   <div class="page">
     <div>
       <a-button type="primary" danger>删除</a-button>
     </div>
-    <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" style="margin-top: 10px;">
+    <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" style="margin-top: 10px;"
+      :scroll="{ x: 1500, y: tableHeight }">
       <template #bodyCell="{ column, index }">
         <template v-if="column.dataIndex === 'operation'">
           <a-button type="primary" danger style="margin-left: 20px;" @click="DeleteColumn(index)">

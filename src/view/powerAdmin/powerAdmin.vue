@@ -1,31 +1,15 @@
 <script setup lang="ts">
 import { RetweetOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons-vue"
-import { reactive, ref, Ref } from 'vue'
+import { reactive, ref, Ref, onMounted, onUnmounted } from 'vue'
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
 import { notification } from 'ant-design-vue';
 import { adminPowerHttp } from '@/api/http'
+import { typeAdminPower } from '@/type/admin.d'
 
-interface powderData {
-  page: number
-}
-async function postAdminPower(data: powderData) {
-  const res = await adminPowerHttp(data)
-  console.log(res);
-}
-//发起请求
-postAdminPower({ page: 1 })
 
 type Key = string | number
-interface DataType {
-  key: string;
-  username: string;
-  name: string;
-  email: string;
-  account: string;
-  status: number
-  lastLogin: string
-}
-const columns: TableColumnType<DataType>[] = [
+
+const columns: TableColumnType<typeAdminPower>[] = [
   {
     title: '用户名',
     dataIndex: 'username',
@@ -35,6 +19,7 @@ const columns: TableColumnType<DataType>[] = [
   }, {
     title: '账号性质',
     dataIndex: 'account',
+
   }, {
     title: '电子邮箱',
     dataIndex: 'email',
@@ -50,41 +35,13 @@ const columns: TableColumnType<DataType>[] = [
     align: "center"
   },
 ];
-const data: Ref<DataType[]> = ref([
-  {
-    key: '1',
-    username: 'John Brown',
-    name: "admin",
-    account: '管理员',
-    email: "1419965049@qq.com",
-    status: 1,
-    lastLogin: '2023-07-21',
-  },
-  {
-    key: '2',
-    username: 'Jim Green',
-    name: "测试账号",
-    account: "测试用户",
-    email: '77077789@qq.com',
-    status: 1,
-    lastLogin: '2023-07-21',
-  },
-  {
-    key: '3',
-    username: 'Jim Green',
-    name: "测试账号",
-    account: "测试用户",
-    email: '77077789@qq.com',
-    status: 2,
-    lastLogin: '2023-07-21',
-  },
-]);
+const data: Ref<typeAdminPower[]> = ref([]);
 //多列选项
 const rowSelection: TableProps['rowSelection'] = {
-  onChange: (selectedRowKeys: Key[], selectedRows: DataType[]) => {
+  onChange: (selectedRowKeys: Key[], selectedRows: typeAdminPower[]) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
-  getCheckboxProps: (record: DataType) => ({
+  getCheckboxProps: (record: typeAdminPower) => ({
     disabled: record.account === '管理员',
     name: record.name,
   }),
@@ -129,6 +86,36 @@ const confirmaddUesr = (values: FormState) => {
 const cancleForm = () => {
   addUser.value = false
 }
+
+
+async function postAdminPower() {
+  const res = await adminPowerHttp({})
+  console.log(res.data.data);
+  data.value = res.data.data
+}
+//发起请求
+postAdminPower()
+
+
+// 定义响应式的高度
+const tableHeight = ref(0);
+// 监听窗口大小变化
+onMounted(() => {
+  const handleResize = () => {
+    const windowHeight = window.innerHeight;
+    const otherElementsHeight = 100; // 假设其他元素的高度为100px
+    tableHeight.value = windowHeight - otherElementsHeight - 200;
+    console.log(tableHeight.value, window.innerWidth);
+
+  };
+
+  handleResize();
+  window.addEventListener('resize', handleResize);
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+  });
+});
 </script>
 <template>
   <div class="page">
@@ -141,7 +128,7 @@ const cancleForm = () => {
       <a-button type="primary" class="btnRight" @click="add">添加</a-button>
       <a-button type="primary" class="btnRight" danger>删除</a-button>
     </div>
-    <a-table :row-selection="rowSelection" :columns="columns" :data-source="data">
+    <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" :scroll="{ x: 1500, y: tableHeight }">
       <template #bodyCell="{ record, column, index }">
         <template v-if="column.dataIndex === 'status'">
           <div class="admin_status" v-if="record.status == 1">
@@ -164,6 +151,16 @@ const cancleForm = () => {
               <DeleteOutlined />
             </template>
           </a-button>
+        </template>
+        <template v-if="column.dataIndex === 'account'">
+          <div class="admin_status" v-if="record.account == 1">
+
+            <div class="status_font">管理员</div>
+          </div>
+          <div class="admin_status" v-else>
+
+            <div class="status_font_none">普通用户</div>
+          </div>
         </template>
       </template>
     </a-table>
