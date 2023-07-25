@@ -58,7 +58,13 @@ const items = reactive([
         label: '销售数据',
         title: '销售数据',
         route: 'saleData',
-      },
+      }, {
+        key: '6',
+        icon: (): VNode => h(LineChartOutlined),
+        label: '用户数据',
+        title: '用户数据',
+        route: 'userData'
+      }
     ],
   },
   {

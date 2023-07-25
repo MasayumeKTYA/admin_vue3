@@ -14,11 +14,10 @@ import App from "./App.vue";
 import router from "./router";
 //状态管理
 import { createPinia } from "pinia";
+import '@/mock/admin.ts'
 const app = createApp(App);
 
-router.beforeEach((to, from, next) => {
-  console.log(to);
-
+router.beforeEach((to, _from, next) => {
   const token = localStorage.getItem('token');
   const isAuthenticated: boolean = !!token;
   const requiresAuth = to.meta.requiresAuth; // 获取路由元字段

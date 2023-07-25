@@ -33,6 +33,10 @@ const routes: RouteRecordRaw[] = [
         path: "saleData",
         name: "saleData",
         component: () => import('../view/saleData/saleData.vue'),
+      },{
+        path: "userData",
+        name: "userData",
+        component: () => import('../view/userData/userData.vue'),
       }
     ]
   },

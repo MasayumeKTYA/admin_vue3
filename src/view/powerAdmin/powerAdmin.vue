@@ -3,6 +3,17 @@ import { RetweetOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons
 import { reactive, ref, Ref } from 'vue'
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
 import { notification } from 'ant-design-vue';
+import { adminPowerHttp } from '@/api/http'
+
+interface powderData {
+  page: number
+}
+async function postAdminPower(data: powderData) {
+  const res = await adminPowerHttp(data)
+  console.log(res);
+}
+//发起请求
+postAdminPower({ page: 1 })
 
 type Key = string | number
 interface DataType {
