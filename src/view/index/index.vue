@@ -12,6 +12,7 @@ import {
   AlignLeftOutlined,
   AlignCenterOutlined,
   LogoutOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons-vue';
 import router from '@/router';
 import { useRoute, } from 'vue-router';
@@ -74,17 +75,44 @@ const items = reactive([
     title: '商品管理',
     children: [
       {
-        key: '4',
+        key: '7',
         icon: (): VNode => h(AlignLeftOutlined),
         label: '商品分类',
         title: '商品分类',
         route: 'shopClassify',
       }, {
-        key: '5',
+        key: '8',
         icon: (): VNode => h(AlignCenterOutlined),
         label: '商品列表',
         title: '商品列表',
         route: 'shopList',
+      }
+    ]
+  },
+  {
+    key: 'sub4',
+    icon: (): VNode => h(UnorderedListOutlined),
+    label: '用户管理',
+    title: '用户订单管理',
+    children: [
+      {
+        key: '9',
+        icon: (): VNode => h(ProfileOutlined),
+        label: '用户订单',
+        title: '用户订单',
+        route: 'userOrder',
+      }, {
+        key: '10',
+        icon: (): VNode => h(SolutionOutlined),
+        label: '发货管理',
+        title: '发货管理',
+        route: 'logistics',
+      }, {
+        key: '11',
+        icon: (): VNode => h(ProfileOutlined),
+        label: '用户信息',
+        title: '用户信息',
+        route: 'userInformation',
       }
     ]
   }

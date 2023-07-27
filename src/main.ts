@@ -5,7 +5,8 @@ import {
   Form, Layout, Avatar,
   Menu, Checkbox, Button, Pagination,
   Input, PageHeader,
-  Table, Modal, Select
+  Table, Modal, Select,
+  Popconfirm, Typography
 } from "ant-design-vue";
 //自定义组件
 import HeaderRouyer from '@/components/HeaderRouyer.vue'
@@ -42,5 +43,7 @@ app.use(Form)
   .use(Table)
   .use(Modal)
   .use(Select)
+  .use(Popconfirm)
+  .use(Typography)
   .use(createPinia())
   .mount("#app");

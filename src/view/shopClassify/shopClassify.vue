@@ -43,10 +43,7 @@ const rowSelection: TableProps['rowSelection'] = {
   onChange: (selectedRowKeys: Key[], selectedRows: DataType[]) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
-  // getCheckboxProps: (record: DataType) => ({
-  //   disabled: record.account === '管理员', // Column configuration not to be checked
-  //   name: record.name,
-  // }),
+
 };
 /**
  * 提示
@@ -92,6 +89,7 @@ function onFinish(value: formStateTyoe) {
     <a-button type="primary" style="margin-left: 10px;" @click="isShow">添加</a-button>
     <a-button type="primary" danger style="margin-left: 10px;">删除</a-button>
   </div>
+  <!--tale表格-->
   <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" style="margin-top: 10px;">
     <template #bodyCell="{ column }">
       <template v-if="column.dataIndex === 'operation'">

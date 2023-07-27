@@ -17,3 +17,11 @@ export async function adminLogHttp(data: any) {
   })
   return res
 }
+export async function shopListHttp(data: any) {
+  const res: AxiosResponse<any> = await axios({
+    method: 'post',
+    url: `${url}/api/shop/list`,
+    data,
+  })
+  return res
+}

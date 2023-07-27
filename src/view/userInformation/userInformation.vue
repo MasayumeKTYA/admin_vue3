@@ -2,15 +2,15 @@
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
 import { DeleteOutlined, EditOutlined, RetweetOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 import { Ref, ref, onMounted, onUnmounted, toRaw } from 'vue'
-import { typeShopList } from '@/type/admin'
-import { shopListHttp } from '@/api/http'
+import { typeUserOrderColumn } from '@/type/admin'
+import { } from '@/api/http'
 import { shhopStore } from '@/state/index'
 const store = shhopStore()
-console.log(store);
+
 
 type Key = string | number
 
-const columns: TableColumnType<typeShopList>[] = [
+const columns: TableColumnType<typeUserOrderColumn>[] = [
   {
     title: 'ID',
     dataIndex: 'id',
@@ -18,7 +18,7 @@ const columns: TableColumnType<typeShopList>[] = [
     sorter: true,
   }, {
     title: '标题',
-    dataIndex: 'shopTitle',
+    dataIndex: 'title',
     align: "center"
   }, {
     title: '商品品类',
@@ -34,11 +34,11 @@ const columns: TableColumnType<typeShopList>[] = [
     align: "center"
   }
 ]
-const data: Ref<typeShopList[]> = ref([])
+const data: Ref<typeUserOrderColumn[]> = ref([])
 
 //多列选项
 const rowSelection: TableProps['rowSelection'] = {
-  onChange: (selectedRowKeys: Key[], selectedRows: typeShopList[]) => {
+  onChange: (selectedRowKeys: Key[], selectedRows: typeUserOrderColumn[]) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
   // getCheckboxProps: (record: DataType) => ({
@@ -46,14 +46,6 @@ const rowSelection: TableProps['rowSelection'] = {
   //   name: record.name,
   // }),
 };
-async function postShopList(postData: any) {
-  const res = await shopListHttp(postData)
-  console.log(res);
-  data.value = res.data.data
-  console.log(res.data.data);
-
-}
-postShopList({ page: 1 })
 
 
 
@@ -79,8 +71,6 @@ onMounted(() => {
 
 
 });
-
-
 
 
 
@@ -119,4 +109,4 @@ onMounted(() => {
     </template>
   </a-table>
 </template>
-<style scoped></style>
+<style></style>

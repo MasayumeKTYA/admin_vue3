@@ -5,8 +5,6 @@ import type { TableProps, TableColumnType, } from 'ant-design-vue';
 import { notification } from 'ant-design-vue';
 import { adminPowerHttp } from '@/api/http'
 import { typeAdminPower } from '@/type/admin.d'
-
-
 type Key = string | number
 
 const columns: TableColumnType<typeAdminPower>[] = [
