@@ -1,5 +1,5 @@
 import Mock from "mockjs";
-import { typeAdminLog, typeAdminPower } from '@/type/admin'
+import { typeAdminLog, typeAdminPower } from '@/type'
 let adminPowderData: typeAdminPower[] = []
 let adminLogData: typeAdminLog[] = []
 

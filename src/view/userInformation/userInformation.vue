@@ -1,44 +1,55 @@
 <script setup lang="ts">
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
-import { DeleteOutlined, EditOutlined, RetweetOutlined, DownloadOutlined } from '@ant-design/icons-vue';
+import { RetweetOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 import { Ref, ref, onMounted, onUnmounted, toRaw } from 'vue'
-import { typeUserOrderColumn } from '@/type/admin'
+import { typeUserData } from '@/type/index'
 import { } from '@/api/http'
-import { shhopStore } from '@/state/index'
-const store = shhopStore()
-
-
+import { shopStore } from '@/state/index'
+const store = shopStore()
 type Key = string | number
-
-const columns: TableColumnType<typeUserOrderColumn>[] = [
+const columns: TableColumnType<typeUserData>[] = [
   {
     title: 'ID',
     dataIndex: 'id',
     align: "center",
     sorter: true,
   }, {
-    title: '标题',
-    dataIndex: 'title',
+    title: '头像',
+    dataIndex: 'avatar',
+    align: "center"
+  },
+  {
+    title: '性别',
+    dataIndex: 'sex',
     align: "center"
   }, {
-    title: '商品品类',
-    dataIndex: 'shopClassify',
+    title: '顾客昵称',
+    dataIndex: 'customer_name',
     align: "center"
   }, {
-    title: '价格',
-    dataIndex: 'price',
+    title: '地址',
+    dataIndex: 'address',
     align: "center"
   }, {
-    title: '操作',
-    dataIndex: 'operation',
+    title: '账号创建时间',
+    dataIndex: 'createTime',
     align: "center"
   }
 ]
-const data: Ref<typeUserOrderColumn[]> = ref([])
+const data: Ref<typeUserData[]> = ref([
+  {
+    id: 1,
+    avatar: 'https://wechat800.oss-cn-shanghai.aliyuncs.com/yume/3cb805be_E886042_a75650be.png',
+    sex: '男',
+    customer_name: '祝涛',
+    address: '上海市康城区',
+    createTime: '2023-07-25'
+  }
+])
 
 //多列选项
 const rowSelection: TableProps['rowSelection'] = {
-  onChange: (selectedRowKeys: Key[], selectedRows: typeUserOrderColumn[]) => {
+  onChange: (selectedRowKeys: Key[], selectedRows: typeUserData[]) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
   // getCheckboxProps: (record: DataType) => ({
@@ -84,29 +95,20 @@ onMounted(() => {
     </a-button>
     <a-button type="primary" style="margin-left: 10px;">添加</a-button>
     <a-button type="primary" danger style="margin-left: 10px;">删除</a-button>
-    <a-button type="text" style="margin-left: 10px;" @click="store.exportExcel(toRaw(data), columns)">
+    <a-button type="primary" style="margin-left: 10px;" @click="store.exportExcel(toRaw(data), columns)">
       <template #icon>
         <DownloadOutlined />
       </template>
-      导出excle{{ store.val }}
+      导出
     </a-button>
   </div>
   <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" style="margin-top: 10px;"
     :scroll="{ x: 1000, y: tableHeight }">
-    <template #bodyCell="{ column }">
-      <template v-if="column.dataIndex === 'operation'">
-        <a-button type="primary" style="margin-left: 20px;">
-          <template #icon>
-            <EditOutlined />
-          </template>
-        </a-button>
-        <a-button type="primary" danger style="margin-left: 20px;">
-          <template #icon>
-            <DeleteOutlined />
-          </template>
-        </a-button>
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.dataIndex === 'avatar'">
+        <img :src="record.avatar" style="height: 40px;width: 40px;" />
       </template>
     </template>
   </a-table>
 </template>
-<style></style>
+<style></style>@/type

@@ -123,4 +123,4 @@ onMounted(() => {
 </template>
 <style scoped>
 @import '../../style/powerLog/powerLog.css';
-</style>
+</style>@/type

@@ -119,4 +119,4 @@ onMounted(() => {
     </template>
   </a-table>
 </template>
-<style scoped></style>
+<style scoped></style>@/type

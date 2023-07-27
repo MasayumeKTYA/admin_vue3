@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
-import { DeleteOutlined, EditOutlined, RetweetOutlined, DownloadOutlined } from '@ant-design/icons-vue';
+import { RetweetOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 import { Ref, ref, onMounted, onUnmounted, toRaw, reactive, UnwrapRef } from 'vue'
-import { typeUserOrderColumn } from '@/type/admin'
+import { typeUserOrderColumn } from '@/type/index'
 import { } from '@/api/http'
-import { shhopStore } from '@/state/index'
+import { shopStore } from '@/state/index'
 import { deepClone } from '@/tool/tool'
-const store = shhopStore()
+const store = shopStore()
 
 type Key = string | number
 
@@ -16,6 +16,10 @@ const columns: TableColumnType<typeUserOrderColumn>[] = [
     dataIndex: 'id',
     align: "center",
     sorter: true,
+  }, {
+    title: '订单编号',
+    dataIndex: 'orderNumber',
+    align: "center",
   }, {
     title: '用户id',
     dataIndex: 'customer_id',
@@ -59,12 +63,25 @@ const data: Ref<typeUserOrderColumn[]> = ref([{
   customer_name: '祝涛',
   customer_id: 1,
   price: '3000',
-  address: '上海市闵行区上海康城'
+  address: '上海市闵行区上海康城',
+  orderNumber: '202306070001'
+}, {
+  id: 2,
+  shopId: 1,
+  shopClassify: '电子数码类',
+  shopTitle: '红米k40',
+  customer_name: '祝涛',
+  customer_id: 1,
+  price: '3000',
+  address: '上海市闵行区上海康城',
+  orderNumber: '202306070001'
 }])
 const editableData: UnwrapRef<Record<string, typeUserOrderColumn>> = reactive({});
 
 const edit = (key: number) => {
   editableData[key] = deepClone(data.value.filter(item => key === item.id)[0]);
+  console.log(editableData);
+
 };
 const save = (key: number) => {
   Object.assign(data.value.filter(item => key === item.id)[0], editableData[key]);
@@ -120,15 +137,17 @@ onMounted(() => {
       <template #icon>
         <DownloadOutlined />
       </template>
-      导出excle{{ store.val }}
+      导出
     </a-button>
   </div>
   <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" style="margin-top: 10px;"
     :scroll="{ x: 2000, y: tableHeight }">
     <template #bodyCell="{ column, text, record }">
+
       <template v-if="['address'].includes(column.dataIndex)">
         <div>
-          <a-input v-if="editableData[record.id]" v-model:value="editableData[record.id][column.dataIndex]"
+          <a-input v-if="editableData[record.id]"
+            v-model:value="editableData[record.id][column.dataIndex as keyof typeUserOrderColumn]"
             style="margin: -5px 0" />
           <template v-else>
             {{ text }}
@@ -138,17 +157,17 @@ onMounted(() => {
       <template v-else-if="column.dataIndex === 'operation'">
         <div class="editable-row-operations">
           <span v-if="editableData[record.id]">
-            <a-typography-link @click="save(record.id)">Save</a-typography-link>
-            <a-popconfirm title="确定取消?" @confirm="cancel(record.id)" style="margin-left: 20px;">
-              <a>Cancel</a>
+            <a-typography-link @click="save(record.id)">保存</a-typography-link>
+            <a-popconfirm title="确定取消?" @confirm="cancel(record.id)">
+              <a style="margin-left: 10px;">取消</a>
             </a-popconfirm>
           </span>
           <span v-else>
-            <a @click="edit(record.id)">Edit</a>
+            <a @click="edit(record.id)">编辑</a>
           </span>
         </div>
       </template>
     </template>
   </a-table>
 </template>
-<style></style>
+<style></style>@/type

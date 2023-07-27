@@ -1,5 +1,5 @@
 import Mock from "mockjs";
-import { typeShopList, } from '@/type/admin'
+import { typeShopList, } from '@/type'
 
 
 // 定义浏览器类型数据

@@ -197,4 +197,4 @@ onMounted(() => {
 </template>
 <style scoped>
 @import '../../style/powerAdmin/powerAdmin.css';
-</style>
+</style>@/type

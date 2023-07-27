@@ -1,9 +1,9 @@
 import { defineStore, } from "pinia";
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-export const shhopStore = defineStore("main", {
+export const shopStore = defineStore("main", {
   state: () => ({
-    val: 0,
+
   }),
   actions: {
     exportExcel(data: any, columns: any) {
