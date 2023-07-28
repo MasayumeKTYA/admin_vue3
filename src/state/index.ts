@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 export const shopStore = defineStore("main", {
   state: () => ({
-
+    name: 'zt'
   }),
   actions: {
     exportExcel(data: any, columns: any) {

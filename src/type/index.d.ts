@@ -58,6 +58,7 @@ export interface typeUserData {
 }
 //物流信息
 export interface typeLogistics {
+  key: number
   customer_name: string,
   customer_id: number,
   startAddress: string,

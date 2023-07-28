@@ -2,10 +2,10 @@
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
 import { DeleteOutlined, EditOutlined, RetweetOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 import { Ref, ref, onMounted, onUnmounted, toRaw } from 'vue'
-import { typeShopList } from '@/type/admin'
+import { typeShopList } from '@/type/index'
 import { shopListHttp } from '@/api/http'
-import { shhopStore } from '@/state/index'
-const store = shhopStore()
+import { shopStore } from '@/state/index'
+const store = shopStore()
 console.log(store);
 
 type Key = string | number
@@ -98,7 +98,7 @@ onMounted(() => {
       <template #icon>
         <DownloadOutlined />
       </template>
-      导出excle{{ store.val }}
+      导出excle
     </a-button>
   </div>
   <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" style="margin-top: 10px;"

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
-import { RetweetOutlined, DownloadOutlined } from '@ant-design/icons-vue';
-import { Ref, ref, onMounted, onUnmounted, toRaw, } from 'vue'
+import { RetweetOutlined, DownloadOutlined, SearchOutlined } from '@ant-design/icons-vue';
+import { Ref, ref, onMounted, onUnmounted, toRaw, reactive, } from 'vue'
 import { typeLogistics } from '@/type/index'
 import { } from '@/api/http'
 import { shopStore } from '@/state/index'
+
 
 const store = shopStore()
 
@@ -47,13 +48,10 @@ const columns: TableColumnType<typeLogistics>[] = [{
   title: '商品名称',
   dataIndex: 'shopTitle',
   align: "center"
-}, {
-  title: '商品名称',
-  dataIndex: 'shopTitle',
-  align: "center"
-}
+},
 ]
 const data: Ref<typeLogistics[]> = ref([{
+  key: 1,
   orderNumber: '202306070001',
   customer_name: '祝涛',
   customer_id: 1,
@@ -61,12 +59,14 @@ const data: Ref<typeLogistics[]> = ref([{
   endAddress: '上海市闵行区莘庄',
   shopTitle: '红米k40',
 }, {
+  key: 2,
   orderNumber: '202306070002',
-  customer_name: '祝涛',
+  customer_name: '测试',
   customer_id: 1,
   startAddress: '上海市闵行区吴泾',
   endAddress: '上海市闵行区莘庄',
   shopTitle: '红米k40',
+
 }])
 
 
@@ -75,14 +75,23 @@ const rowSelection: TableProps['rowSelection'] = {
   onChange: (selectedRowKeys: Key[], selectedRows: typeLogistics[]) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
-  // getCheckboxProps: (record: DataType) => ({
-  //   disabled: record.account === '管理员', // Column configuration not to be checked
-  //   name: record.name,
-  // }),
+
 };
-
-
-
+const search = reactive({
+  searchText: '',
+  searchedColumn: '',
+})
+//重置
+function handleReset(clearFilters: (arg0: { confirm: boolean; }) => void) {
+  clearFilters({ confirm: true });
+  search.searchText = ''
+}
+//搜索
+function handleSearch(selectedKeys: string[], confirm: () => void, dataIndex: string) {
+  confirm();
+  search.searchText = selectedKeys[0];
+  search.searchedColumn = dataIndex;
+}
 // 定义响应式的高度
 const tableHeight = ref(0);
 // 监听窗口大小变化
@@ -124,14 +133,18 @@ onMounted(() => {
     :scroll="{ x: 2000, y: tableHeight }">
     <template #customFilterDropdown="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }">
       <div style="padding: 8px">
-        <a-input placeholder="请输入搜索" :value="selectedKeys[0]" style="width: 188px; margin-bottom: 8px; display: block" />
-        <a-button type="primary" size="small" style="width: 90px; margin-right: 8px">
+        <a-input placeholder="请输入搜索" :value="selectedKeys[0]"
+          @change="(e: any) => { setSelectedKeys(e.target.value ? [e.target.value] : []) }"
+          @pressEnter="handleSearch(selectedKeys, confirm, column.dataIndex)"
+          style="width: 188px; margin-bottom: 8px; display: block" />
+        <a-button type="primary" size="small" style="width: 90px; margin-right: 8px"
+          @click="handleSearch(selectedKeys, confirm, column.dataIndex)">
           <template #icon>
             <SearchOutlined />
           </template>
           搜索
         </a-button>
-        <a-button size="small" style="width: 90px">
+        <a-button size="small" style="width: 90px" @click="handleReset(clearFilters)">
           重置
         </a-button>
       </div>

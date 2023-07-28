@@ -4,7 +4,7 @@ import { DeleteOutlined } from "@ant-design/icons-vue"
 import { Ref, ref, onMounted, onUnmounted } from 'vue'
 import { notification } from 'ant-design-vue';
 import { adminLogHttp } from '@/api/http'
-import { typeAdminLog } from '@/type/admin'
+import { typeAdminLog } from '@/type/index'
 
 type Key = string | number
 

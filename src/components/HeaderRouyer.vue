@@ -3,7 +3,7 @@ import {
   CloseOutlined,
 } from '@ant-design/icons-vue'
 const props = defineProps(['routes'])
-console.log(props.routes);
+
 
 
 </script>
