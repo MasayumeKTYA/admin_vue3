@@ -1,6 +1,7 @@
 # 技术栈
 
 Vue 3 + TypeScript + Vite + pinia + asiox + vue-router
+ui antd vue
 
 ## 使用的pnpm作为包管理工具
 
