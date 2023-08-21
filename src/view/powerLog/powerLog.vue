@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
-import { DeleteOutlined } from "@ant-design/icons-vue"
+// import { DeleteOutlined } from "@ant-design/icons-vue"
 import { Ref, ref, onMounted, onUnmounted } from 'vue'
 import { notification } from 'ant-design-vue';
 import { adminLogHttp } from '@/api/http'
@@ -48,10 +48,10 @@ const data: Ref<typeAdminLog[]> = ref([{
 //删除当列
 let isShowDel: Ref<boolean> = ref(false)
 let currentIndex: number = 0
-function DeleteColumn(index: number) {
-  isShowDel.value = true
-  currentIndex = index
-}
+// function DeleteColumn(index: number) {
+//   isShowDel.value = true
+//   currentIndex = index
+// }
 function confirmDel() {
   data.value.splice(currentIndex, 1)
   isShowDel.value = false
@@ -72,10 +72,21 @@ const rowSelection: TableProps['rowSelection'] = {
 /**
  * 请求
  */
+const pagination = ref({
+  current: 1,
+  pageSize: 10,
+  total: 0,
+  onChange: (page: number) => {
+    pagination.value.current = page
+    //发起分页请求
+    postAdminLog({ page, })
+  }
+})
 async function postAdminLog(page: any) {
   const res = await adminLogHttp(page)
   console.log(res);
   data.value = res.data.data
+  pagination.value.total = res.data.toall
 }
 postAdminLog({ page: 1 })
 // 定义响应式的高度
@@ -87,7 +98,6 @@ onMounted(() => {
     const otherElementsHeight = 100; // 假设其他元素的高度为100px
     tableHeight.value = windowHeight - otherElementsHeight - 200;
     console.log(tableHeight.value);
-
   };
 
   handleResize();
@@ -104,8 +114,8 @@ onMounted(() => {
       <a-button type="primary" danger>删除</a-button>
     </div>
     <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" style="margin-top: 10px;"
-      :scroll="{ x: 1500, y: tableHeight }">
-      <template #bodyCell="{ column, index }">
+      :scroll="{ x: 1500, y: tableHeight }" :pagination="pagination">
+      <!-- <template #bodyCell="{ column, index }">
         <template v-if="column.dataIndex === 'operation'">
           <a-button type="primary" danger style="margin-left: 20px;" @click="DeleteColumn(index)">
             <template #icon>
@@ -113,7 +123,7 @@ onMounted(() => {
             </template>
           </a-button>
         </template>
-      </template>
+      </template> -->
     </a-table>
     <!--弹出-->
     <a-modal v-model:open="isShowDel" title="提醒" cancelText="取消" okText="确定" @ok="confirmDel">

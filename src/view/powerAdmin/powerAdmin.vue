@@ -3,7 +3,11 @@ import { RetweetOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons
 import { reactive, ref, Ref, onMounted, onUnmounted } from 'vue'
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
 import { notification } from 'ant-design-vue';
-import { adminPowerHttp } from '@/api/http'
+import {
+  AdminListHttp,
+  addAdminrHttp,
+  delAdminHttp
+} from '@/api/http'
 import { typeAdminPower } from '@/type/index'
 type Key = string | number
 
@@ -26,7 +30,7 @@ const columns: TableColumnType<typeAdminPower>[] = [
     dataIndex: 'status',
   }, {
     title: '最后登录',
-    dataIndex: 'lastLogin',
+    dataIndex: 'updataTime',
   }, {
     title: '操作',
     dataIndex: 'operation',
@@ -52,10 +56,15 @@ const DeleteColumn = (index: number) => {
   isShowDel.value = true
   currentIndex = index
 }
-const confirmDel = () => {
-  data.value.splice(currentIndex, 1)
-  isShowDel.value = false
-  notification.success({ message: '删除成功', duration: 2 })
+const confirmDel = async () => {
+  const params = { id: data.value[currentIndex].id }
+  const res = await delAdminHttp(params)
+  console.log(res);
+  if (res.status == 201) {
+    data.value.splice(currentIndex, 1)
+    isShowDel.value = false
+    notification.success({ message: '删除成功', duration: 2 })
+  }
 }
 //添加用户
 let addUser: Ref<boolean> = ref(false)
@@ -65,20 +74,33 @@ const add = () => {
 //添加用户弹出表单
 interface FormState {
   username: string;
-  nickname: string;
-  account: string;
+  name: string;
+  account: string | number;
+  password: string
+  email: string
 }
 let formState = reactive({
   username: '',
-  nickname: '',
-  account: ''
+  name: '',
+  account: '',
+  password: '',
+  email: '',
 })
 const onFinishFailed = (errorInfo: any) => {
   console.log(errorInfo);
 }
 //确定添加
-const confirmaddUesr = (values: FormState) => {
+const confirmaddUesr = async (values: FormState) => {
+  values.account = values.account == '管理员' ? 1 : 2
   console.log(values);
+  const res = await addAdminrHttp(values)
+  console.log(res);
+  if (res.status == 201) {
+    postList({ page: 1 })
+    cancleForm()
+    notification.success({ message: '添加成功', duration: 2 })
+  }
+
 }
 //取消添加
 const cancleForm = () => {
@@ -86,14 +108,13 @@ const cancleForm = () => {
 }
 
 
-async function postAdminPower() {
-  const res = await adminPowerHttp({})
-  console.log(res.data.data);
+async function postList(params: any) {
+  const res = await AdminListHttp(params)
+  console.log(res);
   data.value = res.data.data
-}
-//发起请求
-postAdminPower()
 
+}
+postList({ page: 1 })
 
 // 定义响应式的高度
 const tableHeight = ref(0);
@@ -174,8 +195,16 @@ onMounted(() => {
           <a-input v-model:value="formState.username" />
         </a-form-item>
 
-        <a-form-item label="昵称" name="nickname" :rules="[{ required: true, message: '请输入昵称!' }]">
-          <a-input v-model:value="formState.nickname" />
+        <a-form-item label="密码" name="password" :rules="[{ required: true, message: '请输入密码!' }]">
+          <a-input v-model:value="formState.password" />
+        </a-form-item>
+
+        <a-form-item label="邮箱" name="email" :rules="[{ required: true, message: '请输入邮箱!' }]">
+          <a-input v-model:value="formState.email" />
+        </a-form-item>
+
+        <a-form-item label="昵称" name="name" :rules="[{ required: true, message: '请输入昵称!' }]">
+          <a-input v-model:value="formState.name" />
         </a-form-item>
 
         <a-form-item label="账号性质" name="account" :rules="[{ required: true, message: '请选择账号性质!' }]">
@@ -185,10 +214,12 @@ onMounted(() => {
           </a-select>
         </a-form-item>
 
+
+
         <a-form-item :wrapper-col="{ offset: 13, span: 12 }">
           <div style="display: flex;">
             <a-button @click="cancleForm">取消</a-button>
-            <a-button type="primary" html-type="submit" style="margin-left: 20px;">登录</a-button>
+            <a-button type="primary" html-type="submit" style="margin-left: 20px;">添加</a-button>
           </div>
         </a-form-item>
       </a-form>

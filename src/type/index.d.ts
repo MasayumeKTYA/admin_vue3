@@ -2,13 +2,14 @@
  * adminn
  */
 export interface typeAdminPower {
+  id: number,
   key: string;
   username: string;
   name: string;
   email: string;
   account: string;
   status: number
-  lastLogin: string
+  updataTime: string
 }
 
 export interface typeAdminLog {

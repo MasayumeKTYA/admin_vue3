@@ -55,6 +55,15 @@ async function postShopList(postData: any) {
 }
 postShopList({ page: 1 })
 
+const isDel = ref(false)
+//删除
+function getCurrentIndex(index: number) {
+  console.log(index);
+
+}
+function confirmDel() {
+
+}
 
 
 // 定义响应式的高度
@@ -103,14 +112,14 @@ onMounted(() => {
   </div>
   <a-table :row-selection="rowSelection" :columns="columns" :data-source="data" style="margin-top: 10px;"
     :scroll="{ x: 1000, y: tableHeight }">
-    <template #bodyCell="{ column }">
+    <template #bodyCell="{ column, index }">
       <template v-if="column.dataIndex === 'operation'">
         <a-button type="primary" style="margin-left: 20px;">
           <template #icon>
             <EditOutlined />
           </template>
         </a-button>
-        <a-button type="primary" danger style="margin-left: 20px;">
+        <a-button type="primary" danger style="margin-left: 20px;" @click="getCurrentIndex(index)">
           <template #icon>
             <DeleteOutlined />
           </template>
@@ -118,5 +127,9 @@ onMounted(() => {
       </template>
     </template>
   </a-table>
+  <!--是否删除-->
+  <a-modal v-model:open="isDel" title="提醒" cancelText="取消" okText="确定" @ok="confirmDel">
+    您确定要删除吗
+  </a-modal>
 </template>
 <style scoped></style>@/type

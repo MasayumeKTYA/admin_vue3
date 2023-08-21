@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-
+import { loginHttp } from '@/api/http'
 import { reactive } from 'vue';
 import { Router, useRouter } from 'vue-router';
 interface FormState {
   username: string;
   password: string;
-  remember: boolean;
+  remember?: boolean;
 }
 const router: Router = useRouter()
 const formState = reactive<FormState>({
@@ -13,16 +13,19 @@ const formState = reactive<FormState>({
   password: '',
   remember: true,
 });
-const onFinish = (values: FormState) => {
+const onFinish = async (values: FormState) => {
   console.log('Success:', values);
-  // console.log(router);
-  localStorage.setItem('token', "zt")
+  console.log(router);
+  const res = await loginHttp(formState)
+  if (res.status == 201)
+    localStorage.setItem('token', res.data.data)
   router.push({ path: '/' })
 };
 
 const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
 };
+
 
 </script>
 <template>

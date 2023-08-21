@@ -110,8 +110,8 @@ onMounted(() => {
   <div class="page">
     <div class="title">销售数据</div>
     <div class="box">
-      <div ref="chart" style="width: 700px; height: 700px"></div>
-      <div ref="weekEchart" style="width: 700px; height: 700px"></div>
+      <div ref="chart" style="width: 500px; height: 500px"></div>
+      <div ref="weekEchart" style="width: 500px; height: 500px"></div>
     </div>
 
   </div>

@@ -2,6 +2,7 @@
 import type { TableProps, TableColumnType, } from 'ant-design-vue';
 import { DeleteOutlined, EditOutlined, RetweetOutlined } from '@ant-design/icons-vue';
 import { Ref, ref } from 'vue'
+import { classifyHttp, addClassifyHttp } from '@/api/http'
 /**
  * 表格
  */
@@ -28,16 +29,7 @@ const columns: TableColumnType<DataType>[] = [
   },
 
 ]
-const data: Ref<DataType[]> = ref([{
-  id: 1,
-  title: '电子数码类',
-  operation: '',
-},
-{
-  id: 2,
-  title: '床上用品类',
-  operation: '',
-}])
+const data: Ref<DataType[]> = ref([])
 //多列选项
 const rowSelection: TableProps['rowSelection'] = {
   onChange: (selectedRowKeys: Key[], selectedRows: DataType[]) => {
@@ -45,6 +37,21 @@ const rowSelection: TableProps['rowSelection'] = {
   },
 
 };
+
+//http请求
+async function classify(params: any) {
+  const res = await classifyHttp(params)
+  console.log(res);
+  data.value = res.data.data
+}
+classify({ page: 1 })
+
+async function addClassify(params: any) {
+  const res = await addClassifyHttp(params)
+  console.log(res);
+
+}
+
 /**
  * 提示
  */
@@ -63,6 +70,11 @@ function isShow() {
 function isHidden() {
   isShowDel.value = false
 }
+const isDel = ref(false)
+//删除
+const confirmDel = async () => {
+
+}
 //获取数据
 function onFinish(value: formStateTyoe) {
   console.log(formState);
@@ -72,6 +84,7 @@ function onFinish(value: formStateTyoe) {
     operation: ''
   }
   data.value.push(obj)
+  addClassify({ title: value.title })
   //数据清空
   formState.value.title = ''
   isHidden()
@@ -120,6 +133,10 @@ function onFinish(value: formStateTyoe) {
       </a-form-item>
     </a-form>
 
+  </a-modal>
+  <!--是否删除-->
+  <a-modal v-model:open="isDel" title="提醒" cancelText="取消" okText="确定" @ok="confirmDel">
+    您确定要删除吗
   </a-modal>
 </template>
 
