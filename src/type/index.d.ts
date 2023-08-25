@@ -10,6 +10,7 @@ export interface typeAdminPower {
   account: string;
   status: number
   updataTime: string
+  password: string
 }
 
 export interface typeAdminLog {
@@ -52,9 +53,9 @@ export interface typeUserOrderColumn {
 export interface typeUserData {
   id: number;
   avatar: string,
-  customer_name: string,
+  username: string,
   address: string,
-  createTime: string,
+  createDate: string,
   sex: string
 }
 //物流信息

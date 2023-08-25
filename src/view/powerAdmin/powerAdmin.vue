@@ -6,7 +6,8 @@ import { notification } from 'ant-design-vue';
 import {
   AdminListHttp,
   addAdminrHttp,
-  delAdminHttp
+  delAdminHttp,
+  updataAdminHttp
 } from '@/api/http'
 import { typeAdminPower } from '@/type/index'
 type Key = string | number
@@ -75,9 +76,10 @@ const add = () => {
 interface FormState {
   username: string;
   name: string;
-  account: string | number;
+  account: any;
   password: string
   email: string
+  id?: number
 }
 let formState = reactive({
   username: '',
@@ -86,6 +88,8 @@ let formState = reactive({
   password: '',
   email: '',
 })
+
+
 const onFinishFailed = (errorInfo: any) => {
   console.log(errorInfo);
 }
@@ -100,19 +104,57 @@ const confirmaddUesr = async (values: FormState) => {
     cancleForm()
     notification.success({ message: '添加成功', duration: 2 })
   }
-
 }
 //取消添加
 const cancleForm = () => {
   addUser.value = false
 }
 
+//修改
+//修改弹窗的是否显示
+let updataUser = ref(false)
+let updataState = reactive({
+  id: 0,
+  username: '',
+  name: '',
+  account: '',
+  password: '',
+  email: '',
+})
+function updataColumn(index: number) {
+  updataState.id = data.value[index].id
+  updataState.username = data.value[index].username
+  updataState.name = data.value[index].name
+  updataState.account = data.value[index].account
+  updataState.password = data.value[index].password
+  updataState.email = data.value[index].email
 
+  updataUser.value = true
+}
+//取消修改
+function updataHide() {
+  updataUser.value = false
+}
+async function confirmUpdataUesr(values: FormState) {
+  values.account = values.account == '管理员' ? 1 : 2
+  console.log(values);
+  values.id = updataState.id
+  const res = await updataAdminHttp(values)
+  console.log(res);
+  if (res.status == 201) {
+    //关闭弹出框
+    updataHide()
+    postList({ page: 1 })
+    cancleForm()
+    notification.success({ message: '修改成功', duration: 2 })
+  }
+}
+
+//请求列表
 async function postList(params: any) {
   const res = await AdminListHttp(params)
   console.log(res);
   data.value = res.data.data
-
 }
 postList({ page: 1 })
 
@@ -160,7 +202,7 @@ onMounted(() => {
           </div>
         </template>
         <template v-if="column.dataIndex === 'operation'">
-          <a-button type="primary">
+          <a-button type="primary" @click="updataColumn(index)">
             <template #icon>
               <EditOutlined />
             </template>
@@ -188,6 +230,7 @@ onMounted(() => {
     <a-modal v-model:open="isShowDel" title="提醒" cancelText="取消" okText="确定" @ok="confirmDel">
       您确定要删除吗
     </a-modal>
+    <!--添加-->
     <a-modal v-model:open="addUser" :footer="null">
       <a-form :model="formState" name="basic" :label-col="{ span: 5 }" :wrapper-col="{ span: 16 }" autocomplete="off"
         @finish="confirmaddUesr" @finishFailed="onFinishFailed">
@@ -214,11 +257,44 @@ onMounted(() => {
           </a-select>
         </a-form-item>
 
-
-
         <a-form-item :wrapper-col="{ offset: 13, span: 12 }">
           <div style="display: flex;">
             <a-button @click="cancleForm">取消</a-button>
+            <a-button type="primary" html-type="submit" style="margin-left: 20px;">添加</a-button>
+          </div>
+        </a-form-item>
+      </a-form>
+    </a-modal>
+    <!--修改-->
+    <a-modal v-model:open="updataUser" :footer="null">
+      <a-form :model="updataState" name="basic" :label-col="{ span: 5 }" :wrapper-col="{ span: 16 }" autocomplete="off"
+        @finish="confirmUpdataUesr" @finishFailed="onFinishFailed">
+        <a-form-item label="用户名" name="username" :rules="[{ required: true, message: '请输入用户名!' }]">
+          <a-input v-model:value="updataState.username" />
+        </a-form-item>
+
+        <a-form-item label="密码" name="password" :rules="[{ required: true, message: '请输入密码!' }]">
+          <a-input v-model:value="updataState.password" />
+        </a-form-item>
+
+        <a-form-item label="邮箱" name="email" :rules="[{ required: true, message: '请输入邮箱!' }]">
+          <a-input v-model:value="updataState.email" />
+        </a-form-item>
+
+        <a-form-item label="昵称" name="name" :rules="[{ required: true, message: '请输入昵称!' }]">
+          <a-input v-model:value="updataState.name" />
+        </a-form-item>
+
+        <a-form-item label="账号性质" name="account" :rules="[{ required: true, message: '请选择账号性质!' }]">
+          <a-select v-model:value="updataState.account" placeholder="请选择...">
+            <a-select-option value="管理员">管理员</a-select-option>
+            <a-select-option value="测试账号">测试账号</a-select-option>
+          </a-select>
+        </a-form-item>
+
+        <a-form-item :wrapper-col="{ offset: 13, span: 12 }">
+          <div style="display: flex;">
+            <a-button @click="updataHide">取消</a-button>
             <a-button type="primary" html-type="submit" style="margin-left: 20px;">添加</a-button>
           </div>
         </a-form-item>

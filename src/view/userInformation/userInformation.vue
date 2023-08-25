@@ -3,7 +3,7 @@ import type { TableProps, TableColumnType, } from 'ant-design-vue';
 import { RetweetOutlined, DownloadOutlined } from '@ant-design/icons-vue';
 import { Ref, ref, onMounted, onUnmounted, toRaw } from 'vue'
 import { typeUserData } from '@/type/index'
-import { } from '@/api/http'
+import { getUserDataHttp } from '@/api/http'
 import { shopStore } from '@/state/index'
 const store = shopStore()
 type Key = string | number
@@ -24,7 +24,7 @@ const columns: TableColumnType<typeUserData>[] = [
     align: "center"
   }, {
     title: '顾客昵称',
-    dataIndex: 'customer_name',
+    dataIndex: 'username',
     align: "center"
   }, {
     title: '地址',
@@ -32,7 +32,7 @@ const columns: TableColumnType<typeUserData>[] = [
     align: "center"
   }, {
     title: '账号创建时间',
-    dataIndex: 'createTime',
+    dataIndex: 'createDate',
     align: "center"
   }
 ]
@@ -41,9 +41,9 @@ const data: Ref<typeUserData[]> = ref([
     id: 1,
     avatar: 'https://wechat800.oss-cn-shanghai.aliyuncs.com/yume/3cb805be_E886042_a75650be.png',
     sex: '男',
-    customer_name: '祝涛',
+    username: '祝涛',
     address: '上海市康城区',
-    createTime: '2023-07-25'
+    createDate: '2023-07-25'
   }
 ])
 
@@ -57,8 +57,13 @@ const rowSelection: TableProps['rowSelection'] = {
   //   name: record.name,
   // }),
 };
-
-
+async function postgetUserData(page: number) {
+  const res = await getUserDataHttp({ page })
+  if (res.status == 201) {
+    data.value = res.data.data
+  }
+}
+postgetUserData(1)
 
 // 定义响应式的高度
 const tableHeight = ref(0);
@@ -108,7 +113,12 @@ onMounted(() => {
       <template v-if="column.dataIndex === 'avatar'">
         <img :src="record.avatar" style="height: 40px;width: 40px;" />
       </template>
+      <template v-if="column.dataIndex === 'sex'">
+        <div v-if="record.sex == 1">男</div>
+        <div v-else>女</div>
+      </template>
     </template>
+
   </a-table>
 </template>
 <style></style>@/type
